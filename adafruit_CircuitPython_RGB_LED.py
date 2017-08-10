@@ -27,3 +27,22 @@ TODO(description)
 
 * Author(s): Asher Lieber
 """
+
+import digitalio
+import pulseio
+import board
+import time
+
+class rgb_led(object):
+    def __init__(self, pin_r, pin_g, pin_b):
+        self.red_led   = pulseio.PWMOut(pin_r)
+        self.green_led = pulseio.PWMOut(pin_g)
+        self.blue_led  = pulseio.PWMOut(pin_b)
+
+    def set_color(self, r, g, b):
+           self.red_led.duty_cycle = (65535-int(self.map_range(r, 0, 255, 0, 65535)))
+           self.green_led.duty_cycle = (65535-int(self.map_range(g, 0, 255, 0, 65535)))
+           self.blue_led.duty_cycle = (65535-int(self.map_range(b, 0, 255, 0, 65535)))
+
+    def map_range(self, x, in_min, in_max, out_min, out_max):
+        return max(min((x-in_min) * (out_max - out_min) / (in_max-in_min) + out_min, out_max), out_min)
